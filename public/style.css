@@ -1,0 +1,33 @@
+:root { --glass: rgba(255,255,255,0.06); --ring: rgba(255,255,255,0.15); }
+*{box-sizing:border-box} body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+.glass{background:var(--glass);border-radius:1rem;box-shadow:0 10px 30px rgba(0,0,0,.35);border:1px solid var(--ring);backdrop-filter:blur(8px)}
+.glass-dark{background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(12px)}
+.btn{background:linear-gradient(135deg,rgba(99,102,241,.22),rgba(168,85,247,.22));border:1px solid rgba(168,85,247,.35);padding:.6rem .9rem;border-radius:.8rem;transition:transform .08s ease,box-shadow .2s ease}
+.btn:hover{transform:translateY(-1px) scale(1.01);box-shadow:0 8px 20px rgba(0,0,0,.25)}
+.btn-sm{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);padding:.3rem .55rem;border-radius:.6rem}
+.inp{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:.7rem;padding:.55rem .7rem;outline:none}
+.dropzone{border:2px dashed rgba(255,255,255,.25);background:rgba(255,255,255,.04);border-radius:1rem;padding:1.2rem;text-align:center;color:rgba(255,255,255,.85)}
+#board .card{position:relative;border-radius:.9rem;overflow:hidden;border:1px solid rgba(255,255,255,.12);transition:transform .2s ease,filter .25s ease,opacity .25s ease;cursor:pointer;transform-style:preserve-3d}
+#board .card:hover{transform:translateY(-2px) scale(1.05) rotateZ(.4deg);filter:brightness(1.1)}
+#board .card img{width:100%;height:100%;object-fit:cover;display:block;backface-visibility:hidden}
+.card.eliminated{filter:grayscale(1) blur(1px) brightness(.6);opacity:.2;transform:scale(.9)}
+#secretPreview{min-height:120px;display:grid;place-items:center;border:1px dashed rgba(255,255,255,.2);border-radius:.8rem;background:rgba(255,255,255,.04)}
+.hidden{display:none!important}.fadein{animation:fadein .25s ease}@keyframes fadein{from{opacity:0}to{opacity:1}}
+.panel{box-shadow:-10px 0 40px rgba(0,0,0,.5)}.panel-closed{transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1)}.panel-open{transform:translateX(0);transition:transform .35s cubic-bezier(.4,0,.2,1)}
+#chatLog .row{display:flex;gap:.5rem}#chatLog .me{justify-content:flex-end}.bubble{max-width:80%;padding:.45rem .6rem;border-radius:.8rem;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.55);backdrop-filter:blur(10px)}.me .bubble{background:rgba(59,130,246,.25);border-color:rgba(59,130,246,.45)}.meta{font-size:.65rem;opacity:.7}
+#chatBubble{border:1px solid rgba(255,255,255,.18)}#chatBubble:hover{box-shadow:0 15px 40px rgba(0,0,0,.45)}
+@media (max-width:640px){#chatPanel{width:70vw}}
+/* --- SCORE BADGE --- */
+#scoreBoard {
+  transition: transform .25s ease, opacity .25s;
+}
+
+/* Pop animation όταν αλλάζει το σκορ */
+.score-pop {
+  animation: scorePop 0.35s cubic-bezier(.18,.89,.32,1.28);
+}
+
+@keyframes scorePop {
+  0%   { transform: scale(0.7); opacity: 0.5; }
+  100% { transform: scale(1);   opacity: 1; }
+}

@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Βρες τον να!</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    #onlineLinkDisplay { cursor: pointer; text-decoration: underline; }
+    .animate-pop { animation: popIn 0.35s cubic-bezier(.18,.89,.32,1.28); }
+    @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  </style>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white">
+<div class="max-w-6xl mx-auto p-4">
+
+  <header class="flex flex-col gap-1 mb-3">
+    <h1 style="font-weight: 800; font-size: 3rem;">Βρες Τον <span style="color:#7AA2FF;">Να!</span></h1>
+   
+    <div class="flex items-center gap-3">
+      <div id="roomBadge" class="hidden px-3 py-1 rounded-full bg-indigo-600/30 ring-1 ring-indigo-400/40 text-sm"></div>
+    </div>
+    <div id="onlineLinkDisplay" class="hidden text-sm text-indigo-300 mt-1"></div>
+  </header>
+
+  <main id="lobbySection" class="grid lg:grid-cols-3 gap-4 fadein">
+
+    <section class="lg:col-span-1 space-y-4">
+      <div class="glass p-4 space-y-3">
+        <h2 class="font-semibold text-lg">Δωμάτιο</h2>
+        <div class="flex flex-wrap gap-2 items-center">
+          <button id="btnCreate" type="button" class="btn">Δημιουργία</button>
+          <input id="joinCode" placeholder="Κωδικός" class="inp flex-1 min-w-[120px]">
+          <button id="btnJoin" type="button" class="btn">Σύνδεση</button>
+        </div>
+        <p id="roleInfo" class="text-sm text-slate-300"></p>
+        <p id="playersInfo" class="text-sm text-slate-400"></p>
+      </div>
+
+      <div class="glass p-4 space-y-3">
+        <h2 class="font-semibold text-lg">Ανέβασμα Φωτογραφιών (Host)</h2>
+        <div id="dropzone" class="dropzone">Σύρε & άφησε εδώ εικόνες (JPG/PNG)</div>
+        <input id="fileInputMobile" type="file" accept="image/*" multiple class="hidden">
+        <button id="btnMobileSelect" type="button" class="btn w-full">Επιλογή από Αρχεία</button>
+        <button id="btnUpload" type="button" class="btn w-full">Αποστολή</button>
+        <div id="uploadStatus" class="text-sm text-slate-300"></div>
+      </div>
+
+      <div class="glass p-4 space-y-3">
+        <h2 class="font-semibold text-lg">Έναρξη</h2>
+        <button id="btnStart" type="button" class="btn w-full">Ξεκίνα το Παιχνίδι</button>
+      </div>
+    </section>
+
+    <section class="lg:col-span-2 space-y-4">
+      <div class="glass p-4">
+        <h2 class="font-semibold text-lg mb-3">Προεπισκόπηση Ταμπλό</h2>
+        <div id="boardPreview" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 opacity-60"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <section id="gameSection" class="hidden fadein relative">
+<h2 id="scoreBoard" class="mx-auto mb-4 px-4 py-1 rounded-full bg-white/10 text-sm text-indigo-300 backdrop-blur-sm border border-white/10 shadow-sm w-fit">
+  Νίκες: 0 • Ήττες: 0
+</h2>
+
+
+    <div class="grid grid-cols-12 gap-4">
+      <div class="col-span-12 lg:col-span-9 glass p-4">
+        <h2 class="font-semibold text-lg mb-3"></h2>
+        <div id="board" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3"></div>
+
+        <div class="flex gap-2 mt-4">
+          <button id="btnGuess" type="button" class="btn flex-1">Μάντεψε</button>
+          <button id="btnResetElims" type="button" class="btn flex-1">Επαναφορά</button>
+          <button id="btnRestart" type="button" class="btn flex-1 bg-purple-600 hover:bg-purple-500 transition">Ξανά Παίξε</button>
+        </div>
+
+        <div class="mt-4">
+          <h3 class="font-semibold text-sm mb-1">Ο Παίκτης Σου</h3>
+          <div id="secretPreview" class="secret"></div>
+        </div>
+      </div>
+    </div>
+<!-- MUTE BUTTON -->
+<button id="btnMute"
+class="fixed z-30 bottom-28 right-6 
+px-3 py-2 rounded-full 
+bg-white/10 ring-1 ring-white/20 shadow-xl
+backdrop-blur-sm
+hover:bg-white/20 transition">
+🔊
+</button>
+
+<!-- CHAT BUTTON -->
+<button id="chatBubble"
+class="fixed z-30 bottom-6 right-6 
+w-14 h-14 rounded-full
+bg-white/10 ring-1 ring-white/20 shadow-xl
+backdrop-blur-sm
+hover:bg-white/15 grid place-items-center">
+💬
+</button>
+
+    <aside id="chatPanel" class="fixed z-40 top-0 right-0 h-full w-full lg:w-[30vw] panel-closed">
+      <div class="panel glass-dark h-full flex flex-col">
+        <div class="flex items-center justify-between p-3 border-b border-white/10">
+          <div class="font-semibold">Chat</div>
+          <button id="chatClose" type="button" class="btn-sm">✕</button>
+        </div>
+        <div id="chatLog" class="flex-1 overflow-auto p-3 space-y-2"></div>
+        <div class="p-3 flex gap-2 border-t border-white/10">
+          <input id="chatInput" class="inp flex-1" placeholder="Γράψε μήνυμα…">
+          <button id="btnSendChat" type="button" class="btn">Send</button>
+        </div>
+      </div>
+    </aside>
+  </section>
+</div>
+
+<!-- RESULT MODAL -->
+<div id="resultModal" class="fixed inset-0 hidden items-center justify-center bg-black/70 backdrop-blur-sm z-50">
+  <div class="bg-slate-800 p-6 rounded-xl shadow-xl text-center animate-pop">
+    <div id="resultText" class="text-3xl font-bold mb-4"></div>
+    <div class="flex gap-3 justify-center mt-4">
+      <button id="modalRestart" type="button" class="btn bg-purple-600 hover:bg-purple-500">Ξανά Παίξε</button>
+      <button id="modalNewBoard" type="button" class="btn bg-indigo-600 hover:bg-indigo-500">Νέο Ταμπλό</button>
+    </div>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="game.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "vreston-na-ui-dark",
+  "version": "2.1.0",
+  "description": "Βρες τον να! — clean glass UI, slide-in chat, memory-safe uploads, online play.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1",
+    "socket.io": "^4.8.1"
+  }
+}
